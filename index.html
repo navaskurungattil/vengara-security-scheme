@@ -17,11 +17,20 @@ header.hero{background:#0f5132;color:#fff;border-radius:18px;padding:22px 24px}
 h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
 .asof{opacity:.85;font-size:14px}
 .take{color:var(--muted);margin:0}
-.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.kpi b{display:block;font-size:30px;line-height:1.15}.kpi span{font-size:13px;color:var(--muted)}
-.kpi.lead{background:#0f5132;border-color:#0f5132}.kpi.lead b,.kpi.lead span{color:#fff}
-.kpi.new b{color:var(--new)}.kpi.warn b{color:var(--warn)}
+.group{display:grid;gap:10px}
+#k-total{display:grid}
+.glabel{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:4px 2px 0}
+.reg{display:grid;gap:10px;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr)}
+.stat{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.base{display:grid;gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:760px){.reg{grid-template-columns:1fr}.base{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
+.kpi b{display:block;font-size:28px;line-height:1.15}.kpi span{font-size:13px;color:var(--muted)}
+.kpi small{font-size:12px;color:var(--muted)}
+.kpi.lead{background:#0f5132;border-color:#0f5132;align-content:center;padding:20px}.kpi.lead b{font-size:52px;color:#fff}.kpi.lead span,.kpi.lead small{color:#d4e8dc}
+.kpi .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.kpi.ok b{color:var(--brand)}.kpi.new b{color:var(--new)}.kpi.warn b{color:var(--warn)}
+.prog{height:6px;border-radius:3px;background:var(--track);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--brand2)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;min-width:0}
 h2{font-size:17px;margin:0}.note{font-size:13px;color:var(--muted);margin:0}
 .bars{display:grid;gap:10px}
@@ -55,7 +64,14 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <div class="asof" id="asof"></div>
   </header>
   <p class="take" id="take"></p>
-  <section class="kpis" id="kpis"></section>
+  <section class="group" aria-label="2027 registrations">
+    <div class="glabel">2027 registrations</div>
+    <div class="reg"><div id="k-total"></div><div class="stat" id="k-status"></div></div>
+  </section>
+  <section class="group" aria-label="Renewal against past 3 years">
+    <div class="glabel">Renewal against past 3 years (2024–2026)</div>
+    <div class="base" id="k-base"></div>
+  </section>
 
   <section class="card">
     <h2>2027 registrations by Panchayath</h2>
@@ -83,7 +99,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1792956711"></script>
+<script src="data.js?v=1792957500"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
@@ -95,9 +111,23 @@ T.pct_renewed=T.past_3_years?T.existing/T.past_3_years:0;
 const d=new Date(D.as_of+'T00:00:00Z');
 document.getElementById('asof').textContent='As of '+d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 document.getElementById('take').textContent=`${fmt(T.total_2027)} registrations for 2027: ${fmt(T.existing)} renewals from ${fmt(T.past_3_years)} past members (${pct(T.pct_renewed)}) and ${fmt(T.new)} new. ${fmt(T.not_renewed)} past members still to renew.`;
-const K=document.getElementById('kpis');
-[[T.total_2027,'Total 2027 registrations','lead'],[T.existing,'Existing members renewed',''],[T.new,'New members','new'],[T.past_3_years,'Past 3 years members (2024–2026)',''],[T.not_renewed,'Not yet renewed','warn'],[pct(T.pct_renewed),'Renewed','']]
- .forEach(([v,l,c])=>{const k=el('div','kpi '+c);k.append(el('b',null,typeof v==='number'?fmt(v):v),el('span',null,l));K.appendChild(k);});
+const n=k=>P.reduce((a,r)=>a+(r[k]||0),0);
+const S={active:T.active+n('new_active'),pending:T.pending+n('new_pending'),cash:T.cash_in_hand+n('new_cash_in_hand'),approved:n('approved')+n('new_approved')};
+const tile=(host,cls,val,label,note,dot,prog)=>{const k=el('div','kpi '+cls);const b=el('b',null,typeof val==='number'?fmt(val):val);k.appendChild(b);
+ const sp=el('span');if(dot){const d=el('i','dot');d.style.background=dot;sp.appendChild(d);}sp.append(label);k.appendChild(sp);
+ if(note)k.appendChild(el('small',null,note));if(prog!=null){const p=el('div','prog');const i=el('i');i.style.width=Math.max(1,Math.min(100,prog*100))+'%';p.appendChild(i);k.appendChild(p);}host.appendChild(k);};
+const share=v=>T.total_2027?pct(v/T.total_2027)+' of registrations':'';
+tile(document.getElementById('k-total'),'lead',T.total_2027,'Total 2027 registrations',`${fmt(T.existing)} existing + ${fmt(T.new)} new`);
+const KS=document.getElementById('k-status');
+tile(KS,'ok',S.active,'Active members',share(S.active),'var(--brand)');
+tile(KS,'',S.pending,'Pending',share(S.pending),'#c28a1a');
+tile(KS,'',S.cash,'Cash in hand',share(S.cash),'var(--new)');
+tile(KS,'',S.approved,'Approved',share(S.approved),'var(--muted)');
+const KB=document.getElementById('k-base');
+tile(KB,'',T.past_3_years,'Past 3 years members','2024 + 2025 + 2026');
+tile(KB,'ok',T.existing,'Renewed',pct(T.pct_renewed)+' of past members',null,T.pct_renewed);
+tile(KB,'warn',T.not_renewed,'Not yet renewed','Follow-up pending');
+tile(KB,'new',T.new,'New members','Not in past 3 years list');
 const max=Math.max(1,...P.map(r=>r.total_2027)), B=document.getElementById('bars');
 P.forEach(r=>{const row=el('div','brow');row.append(el('div','n',r.panchayath));const tr=el('div','track');tr.title=`${r.panchayath}: ${r.existing} existing + ${r.new} new`;
  const a=el('i');a.style.width=(r.existing/max*100)+'%';a.style.background='var(--brand2)';const b=el('i');b.style.width=(r.new/max*100)+'%';b.style.background='var(--new)';tr.append(a,b);row.append(tr,el('div','t',fmt(r.total_2027)));B.appendChild(row);});
