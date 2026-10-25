@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vengara Security Scheme 2027</title>
+<meta name="description" content="Riyadh KMCC Vengara Mandalam – Security Scheme 2027 renewal status">
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#f3f5f2;--panel:#fff;--fg:#17241d;--muted:#5d6b63;--line:#dfe5df;--brand:#0f5132;--brand2:#2f7d5a;--new:#1f6fb2;--warn:#b54708;--track:#e7ece7}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1512;--panel:#17201b;--fg:#e8efe9;--muted:#9aaba1;--line:#2a3630;--brand:#3fa877;--brand2:#2b8a5f;--new:#5aa5e6;--warn:#f0a35e;--track:#24302a;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+header.hero{background:#0f5132;color:#fff;border-radius:18px;padding:22px 24px}
+.org{font-weight:700;font-size:17px}.sub{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-top:2px}
+h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
+.asof{opacity:.85;font-size:14px}
+.take{color:var(--muted);margin:0}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi b{display:block;font-size:30px;line-height:1.15}.kpi span{font-size:13px;color:var(--muted)}
+.kpi.lead{background:#0f5132;border-color:#0f5132}.kpi.lead b,.kpi.lead span{color:#fff}
+.kpi.new b{color:var(--new)}.kpi.warn b{color:var(--warn)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;min-width:0}
+h2{font-size:17px;margin:0}.note{font-size:13px;color:var(--muted);margin:0}
+.bars{display:grid;gap:10px}
+.brow{display:grid;grid-template-columns:minmax(90px,130px) 1fr 40px;align-items:center;gap:10px}
+.brow .n{font-weight:600}.brow .t{font-weight:700;text-align:right}
+.track{height:22px;background:var(--track);border-radius:6px;display:flex;overflow:hidden}
+.track i{display:block;height:100%}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:12px;color:var(--muted);font-weight:600;text-align:right;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--panel)}
+td{text-align:right;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th.l,td.l{text-align:left}td.b{font-weight:700}td.w{color:var(--warn);font-weight:600}
+tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:none}
+th button{all:unset;cursor:pointer}th button:focus-visible{outline:2px solid var(--brand)}
+.pct{display:inline-grid;gap:3px;min-width:64px;justify-items:end}.pct .bar{width:100%;height:5px;border-radius:3px;background:var(--track);overflow:hidden}.pct .bar i{display:block;height:100%;background:var(--brand2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tools input,.tools select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);min-width:0}
+.tools input{flex:1 1 180px}
+.cobox{max-height:560px;overflow:auto}
+footer{font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="org">Riyadh KMCC Vengara Mandalam</div>
+    <div class="sub">Security Scheme</div>
+    <h1>2027 Renewal Status</h1>
+    <div class="asof" id="asof"></div>
+  </header>
+  <p class="take" id="take"></p>
+  <section class="kpis" id="kpis"></section>
+
+  <section class="card">
+    <h2>2027 registrations by Panchayath</h2>
+    <div class="legend"><span><i style="background:var(--brand2)"></i>Existing renewed</span><span><i style="background:var(--new)"></i>New</span></div>
+    <div class="bars" id="bars"></div>
+  </section>
+
+  <section class="card">
+    <h2>Panchayath summary</h2>
+    <p class="note">Active, cash in hand and pending are the 2027 portal status of existing members. % renewed = existing ÷ past 3 years (2024–2026) members.</p>
+    <div class="scroll"><table id="pt"><thead><tr>
+      <th class="l">Panchayath</th><th>Total 2027</th><th>Existing</th><th>New</th><th>Active</th><th>Cash in hand</th><th>Pending</th><th>Past 3 yrs</th><th>Not renewed</th><th>% renewed</th>
+    </tr></thead><tbody></tbody><tfoot><tr id="ptot"></tr></tfoot></table></div>
+  </section>
+
+  <section class="card">
+    <h2>C/O summary</h2>
+    <p class="note">Each care-of person's members. Tap a column to sort.</p>
+    <div class="tools"><input id="q" type="search" placeholder="Search C/O" aria-label="Search C/O"><select id="f" aria-label="Panchayath"><option value="">All Panchayaths</option></select></div>
+    <div class="scroll cobox"><table id="ct"><thead><tr>
+      <th class="l"><button data-k="care_of">C/O</button></th><th class="l"><button data-k="panchayath">Panchayath</button></th>
+      <th><button data-k="total_2027">Total 2027</button></th><th><button data-k="existing">Existing</button></th><th><button data-k="new">New</button></th>
+      <th><button data-k="past_3_years">Past 3 yrs</button></th><th><button data-k="not_renewed">Not renewed</button></th><th><button data-k="pct_renewed">% renewed</button></th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+  <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
+</div>
+<script src="data.js"></script>
+<script>
+(function(){
+const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
+const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+const P=D.panchayath.slice().sort((a,b)=>b.total_2027-a.total_2027||b.pct_renewed-a.pct_renewed);
+const s=k=>P.reduce((a,r)=>a+r[k],0);
+const T={};['total_2027','existing','new','active','cash_in_hand','pending','past_3_years','not_renewed'].forEach(k=>T[k]=s(k));
+T.pct_renewed=T.past_3_years?T.existing/T.past_3_years:0;
+const d=new Date(D.as_of+'T00:00:00Z');
+document.getElementById('asof').textContent='As of '+d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+document.getElementById('take').textContent=`${fmt(T.total_2027)} registrations for 2027: ${fmt(T.existing)} renewals from ${fmt(T.past_3_years)} past members (${pct(T.pct_renewed)}) and ${fmt(T.new)} new. ${fmt(T.not_renewed)} past members still to renew.`;
+const K=document.getElementById('kpis');
+[[T.total_2027,'Total 2027 registrations','lead'],[T.existing,'Existing members renewed',''],[T.new,'New members','new'],[T.past_3_years,'Past 3 years members (2024–2026)',''],[T.not_renewed,'Not yet renewed','warn'],[pct(T.pct_renewed),'Renewed','']]
+ .forEach(([v,l,c])=>{const k=el('div','kpi '+c);k.append(el('b',null,typeof v==='number'?fmt(v):v),el('span',null,l));K.appendChild(k);});
+const max=Math.max(1,...P.map(r=>r.total_2027)), B=document.getElementById('bars');
+P.forEach(r=>{const row=el('div','brow');row.append(el('div','n',r.panchayath));const tr=el('div','track');tr.title=`${r.panchayath}: ${r.existing} existing + ${r.new} new`;
+ const a=el('i');a.style.width=(r.existing/max*100)+'%';a.style.background='var(--brand2)';const b=el('i');b.style.width=(r.new/max*100)+'%';b.style.background='var(--new)';tr.append(a,b);row.append(tr,el('div','t',fmt(r.total_2027)));B.appendChild(row);});
+const pc=v=>{const w=el('span','pct');w.appendChild(el('span',null,pct(v)));const b=el('span','bar');const i=el('i');i.style.width=Math.min(100,v*100)+'%';b.appendChild(i);w.appendChild(b);return w;};
+const tb=document.querySelector('#pt tbody');
+P.forEach(r=>{const tr=el('tr');[['panchayath','l b'],['total_2027','b'],['existing'],['new'],['active'],['cash_in_hand'],['pending'],['past_3_years'],['not_renewed','w'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');if(k==='pct_renewed')td.appendChild(pc(r[k]));else td.textContent=k==='panchayath'?r[k]:fmt(r[k]);tr.appendChild(td);});tb.appendChild(tr);});
+const ft=document.getElementById('ptot');['Total',fmt(T.total_2027),fmt(T.existing),fmt(T.new),fmt(T.active),fmt(T.cash_in_hand),fmt(T.pending),fmt(T.past_3_years),fmt(T.not_renewed),pct(T.pct_renewed)].forEach((v,i)=>ft.appendChild(el('td',i?'':'l',v)));
+const q=document.getElementById('q'),fs=document.getElementById('f');
+[...new Set(D.co.map(r=>r.panchayath))].sort().forEach(p=>{const o=el('option',null,p);o.value=p;fs.appendChild(o);});
+let sk='total_2027',sd=-1;
+function drawCo(){const tb=document.querySelector('#ct tbody');tb.textContent='';const qq=q.value.trim().toLowerCase(),ff=fs.value;
+ D.co.filter(r=>(!ff||r.panchayath===ff)&&(!qq||r.care_of.toLowerCase().includes(qq)))
+ .sort((a,b)=>(typeof a[sk]==='number'?a[sk]-b[sk]:String(a[sk]).localeCompare(String(b[sk])))*sd||b.total_2027-a.total_2027)
+ .forEach(r=>{const tr=el('tr');[['care_of','l b'],['panchayath','l'],['total_2027','b'],['existing'],['new'],['past_3_years'],['not_renewed','w'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');
+  if(k==='pct_renewed'){if(r.past_3_years>0)td.appendChild(pc(r[k]));else td.textContent='New C/O';}else td.textContent=(k==='care_of'||k==='panchayath')?r[k]:fmt(r[k]);tr.appendChild(td);});tb.appendChild(tr);});
+ document.querySelectorAll('#ct th').forEach(th=>th.setAttribute('aria-sort',th.querySelector('button').dataset.k===sk?(sd>0?'ascending':'descending'):'none'));}
+document.querySelectorAll('#ct th button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;sd=sk===k?-sd:(k==='care_of'||k==='panchayath'?1:-1);sk=k;drawCo();}));
+q.addEventListener('input',drawCo);fs.addEventListener('change',drawCo);drawCo();
+})();
+</script>
+</body>
+</html>
