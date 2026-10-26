@@ -7,7 +7,7 @@
 <meta name="description" content="Riyadh KMCC Vengara Mandalam – Security Scheme 2027 renewal status">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f3f5f2;--panel:#fff;--fg:#17241d;--muted:#5d6b63;--line:#dfe5df;--brand:#0f5132;--brand2:#2f7d5a;--new:#1f6fb2;--warn:#b54708;--track:#e7ece7}
 @media (prefers-color-scheme:dark){:root{--bg:#0f1512;--panel:#17201b;--fg:#e8efe9;--muted:#9aaba1;--line:#2a3630;--brand:#3fa877;--brand2:#2b8a5f;--new:#5aa5e6;--warn:#f0a35e;--track:#24302a;color-scheme:dark}}
@@ -33,13 +33,14 @@ h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
 .kpi.lead{background:#0f5132;border-color:#0f5132;align-content:center;padding:20px}.kpi.lead b{font-size:52px;color:#fff}.kpi.lead span,.kpi.lead small{color:#d4e8dc}
 .kpi .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
 .kpi.ok b{color:var(--brand)}.kpi.new b{color:var(--new)}.kpi.warn b{color:var(--warn)}
-.hero2{display:grid!important;grid-template-columns:auto minmax(0,1fr);gap:0;align-items:center;padding:22px 24px!important}
-.hero2 .hl{padding-right:22px;display:grid;gap:2px}
-.hero2 .big{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-weight:600;font-size:clamp(64px,13vw,84px);line-height:.95;color:#fff;letter-spacing:-.02em;font-variant-numeric:lining-nums}
+.hero2{display:grid!important;grid-template-columns:auto minmax(150px,1fr);gap:0;align-items:center;padding:20px 18px!important}
+.hero2 .hl{padding-right:18px;display:flex;align-items:center;justify-content:center;min-width:110px}
+.hero2 .big{display:inline-block;white-space:nowrap;font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:600;font-size:110px;line-height:.72;color:#fff;letter-spacing:-.01em;font-variant-numeric:lining-nums tabular-nums}
 .hero2 .cap{font-size:13px;color:#cfe3d7;margin-top:6px}
-.hero2 .hr{border-left:1px solid rgba(255,255,255,.16);padding-left:20px;display:grid}
-.hero2 .li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 0;font-size:13px;color:#cfe3d7;border-bottom:1px solid rgba(255,255,255,.10)}
+.hero2 .hr{border-left:1px solid rgba(255,255,255,.16);padding-left:16px;display:grid}
+.hero2 .li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;font-size:13px;color:#cfe3d7;border-bottom:1px solid rgba(255,255,255,.10)}
 .hero2 .li:last-child{border-bottom:none}
+.hero2 .li span{white-space:nowrap}
 .hero2 .li strong{font-size:15px;color:#fff;font-weight:600}
 .prog{height:6px;border-radius:3px;background:var(--track);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--brand2)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;min-width:0}
@@ -111,7 +112,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1793038830"></script>
+<script src="data.js?v=1793039147"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
@@ -131,9 +132,13 @@ const tile=(host,cls,val,label,note,dot,prog)=>{const k=el('div','kpi '+cls);con
  if(note)k.appendChild(el('small',null,note));if(prog!=null){const p=el('div','prog');const i=el('i');i.style.width=Math.max(1,Math.min(100,prog*100))+'%';p.appendChild(i);k.appendChild(p);}host.appendChild(k);};
 const share=v=>T.total_2027?pct(v/T.total_2027)+' of registrations':'';
 (()=>{const h=document.getElementById('k-total');const k=el('div','kpi lead hero2');
- const L=el('div','hl');L.append(el('div','big',fmt(T.total_2027)),el('div','cap','Total 2027 registrations'));
- const R=el('div','hr');[['Existing renewed',fmt(T.existing)],['New members',fmt(T.new)],['Renewal rate',pct(T.pct_renewed)]].forEach(([a,b])=>{const r=el('div','li');r.append(el('span',null,a),el('strong',null,b));R.appendChild(r);});
- k.append(L,R);h.appendChild(k);})();
+ const L=el('div','hl');L.append(el('div','big',fmt(T.total_2027)));L.setAttribute('aria-label','Total 2027 registrations');
+ const R=el('div','hr');[['Renewed',fmt(T.existing)],['New members',fmt(T.new)],['Renewal rate',pct(T.pct_renewed)]].forEach(([a,b])=>{const r=el('div','li');r.append(el('span',null,a),el('strong',null,b));R.appendChild(r);});
+ k.append(L,R);h.appendChild(k);
+ const fit=()=>{const big=L.firstChild;const H=k.clientHeight;const W=Math.max(80,k.clientWidth-36-18-150);
+  big.style.fontSize='100px';const r=big.getBoundingClientRect();const capPx=100*0.70;
+  const byH=H, byW=100*W/Math.max(1,r.width);big.style.fontSize=Math.floor(Math.min(byH,byW))+'px';};
+ fit();addEventListener('resize',fit);if(document.fonts)document.fonts.ready.then(fit);})();
 const KS=document.getElementById('k-status');
 tile(KS,'ok',S.active,'Active members',share(S.active),'var(--brand)');
 tile(KS,'',S.pending,'Pending',share(S.pending),'#c28a1a');
