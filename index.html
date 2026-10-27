@@ -23,8 +23,9 @@ h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
 .glabel{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:4px 2px 0}
 .reg{display:grid;gap:10px;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr)}
 .stat{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
-.base{display:grid;gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:760px){.reg{grid-template-columns:1fr}.base{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.base{display:grid;gap:10px;grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi.mute b{color:var(--muted)}
+@media (max-width:760px){.reg{grid-template-columns:1fr}.base{grid-template-columns:repeat(2,minmax(0,1fr))}.base>.kpi:last-child{grid-column:1/-1}}
 .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
 .kpi b{display:block;font-size:28px;line-height:1.15}.kpi span{font-size:13px;color:var(--muted)}
 .kpi small{font-size:12px;color:var(--muted)}
@@ -93,7 +94,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <h2>Panchayath summary</h2>
     <p class="note">Active, cash in hand and pending are the 2027 portal status of existing members. % renewed = existing ÷ past 3 years (2024–2026) members.</p>
     <div class="scroll"><table id="pt"><thead><tr>
-      <th class="l">Panchayath</th><th>Total 2027</th><th>Existing</th><th>New</th><th>Active</th><th>Cash in hand</th><th>Pending</th><th>Past 3 yrs</th><th>Not renewed</th><th>% renewed</th>
+      <th class="l">Panchayath</th><th>Total 2027</th><th>Existing</th><th>New</th><th>Active</th><th>Cash in hand</th><th>Pending</th><th>Past 3 yrs</th><th>Not renewed</th><th>Not renewing</th><th>% renewed</th>
     </tr></thead><tbody></tbody><tfoot><tr id="ptot"></tr></tfoot></table></div>
   </section>
 
@@ -104,23 +105,23 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <div class="scroll cobox"><table id="ct"><thead><tr>
       <th class="l"><button data-k="care_of">C/O</button></th><th class="l"><button data-k="panchayath">Panchayath</button></th>
       <th><button data-k="total_2027">Total 2027</button></th><th><button data-k="existing">Existing</button></th><th><button data-k="new">New</button></th>
-      <th><button data-k="past_3_years">Past 3 yrs</button></th><th><button data-k="not_renewed">Not renewed</button></th><th><button data-k="pct_renewed">% renewed</button></th>
+      <th><button data-k="past_3_years">Past 3 yrs</button></th><th><button data-k="not_renewed">Not renewed</button></th><th><button data-k="not_renewing">Not renewing</button></th><th><button data-k="pct_renewed">% renewed</button></th>
     </tr></thead><tbody></tbody></table></div>
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1793075426"></script>
+<script src="data.js?v=1793087449"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
 const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
 const P=D.panchayath.slice().sort((a,b)=>b.total_2027-a.total_2027||b.pct_renewed-a.pct_renewed);
 const s=k=>P.reduce((a,r)=>a+r[k],0);
-const T={};['total_2027','existing','new','active','cash_in_hand','pending','past_3_years','not_renewed'].forEach(k=>T[k]=s(k));
+const T={};['total_2027','existing','new','active','cash_in_hand','pending','past_3_years','not_renewed','not_renewing'].forEach(k=>T[k]=s(k));
 T.pct_renewed=T.past_3_years?T.existing/T.past_3_years:0;
 const d=new Date(D.as_of+'T00:00:00Z');
 if(D.updated_at){const u=new Date(D.updated_at);document.getElementById('upd').textContent='Last updated: '+u.toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Riyadh'})+' (Riyadh time)';}
-document.getElementById('take').textContent=`${fmt(T.total_2027)} registrations for 2027: ${fmt(T.existing)} renewals from ${fmt(T.past_3_years)} past members (${pct(T.pct_renewed)}) and ${fmt(T.new)} new. ${fmt(T.not_renewed)} past members still to renew.`;
+document.getElementById('take').textContent=`${fmt(T.total_2027)} registrations for 2027: ${fmt(T.existing)} renewals from ${fmt(T.past_3_years)} past members (${pct(T.pct_renewed)}) and ${fmt(T.new)} new. ${fmt(T.not_renewed)} past members still to renew${T.not_renewing?`; ${fmt(T.not_renewing)} confirmed not renewing`:''}.`;
 const n=k=>P.reduce((a,r)=>a+(r[k]||0),0);
 const S={active:T.active+n('new_active'),pending:T.pending+n('new_pending'),cash:T.cash_in_hand+n('new_cash_in_hand'),approved:n('approved')+n('new_approved')};
 const tile=(host,cls,val,label,note,dot,prog)=>{const k=el('div','kpi '+cls);const b=el('b',null,typeof val==='number'?fmt(val):val);k.appendChild(b);
@@ -144,21 +145,22 @@ const KB=document.getElementById('k-base');
 tile(KB,'',T.past_3_years,'Past 3 years members','2024 + 2025 + 2026');
 tile(KB,'ok',T.existing,'Renewed',pct(T.pct_renewed)+' of past members',null,T.pct_renewed);
 tile(KB,'warn',T.not_renewed,'Not yet renewed','Follow-up pending');
+tile(KB,'mute',T.not_renewing,'Not renewing','Confirmed: exit, death, other');
 tile(KB,'new',T.new,'New members','Not in past 3 years list');
 const max=Math.max(1,...P.map(r=>r.total_2027)), B=document.getElementById('bars');
 P.forEach(r=>{const row=el('div','brow');row.append(el('div','n',r.panchayath));const tr=el('div','track');tr.title=`${r.panchayath}: ${r.existing} existing + ${r.new} new`;
  const a=el('i');a.style.width=(r.existing/max*100)+'%';a.style.background='var(--brand2)';const b=el('i');b.style.width=(r.new/max*100)+'%';b.style.background='var(--new)';tr.append(a,b);row.append(tr,el('div','t',fmt(r.total_2027)));B.appendChild(row);});
 const pc=v=>{const w=el('span','pct');w.appendChild(el('span',null,pct(v)));const b=el('span','bar');const i=el('i');i.style.width=Math.min(100,v*100)+'%';b.appendChild(i);w.appendChild(b);return w;};
 const tb=document.querySelector('#pt tbody');
-P.forEach(r=>{const tr=el('tr');[['panchayath','l b'],['total_2027','b'],['existing'],['new'],['active'],['cash_in_hand'],['pending'],['past_3_years'],['not_renewed','w'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');if(k==='pct_renewed')td.appendChild(pc(r[k]));else td.textContent=k==='panchayath'?r[k]:fmt(r[k]);tr.appendChild(td);});tb.appendChild(tr);});
-const ft=document.getElementById('ptot');['Total',fmt(T.total_2027),fmt(T.existing),fmt(T.new),fmt(T.active),fmt(T.cash_in_hand),fmt(T.pending),fmt(T.past_3_years),fmt(T.not_renewed),pct(T.pct_renewed)].forEach((v,i)=>ft.appendChild(el('td',i?'':'l',v)));
+P.forEach(r=>{const tr=el('tr');[['panchayath','l b'],['total_2027','b'],['existing'],['new'],['active'],['cash_in_hand'],['pending'],['past_3_years'],['not_renewed','w'],['not_renewing'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');if(k==='pct_renewed')td.appendChild(pc(r[k]));else td.textContent=k==='panchayath'?r[k]:fmt(r[k]);tr.appendChild(td);});tb.appendChild(tr);});
+const ft=document.getElementById('ptot');['Total',fmt(T.total_2027),fmt(T.existing),fmt(T.new),fmt(T.active),fmt(T.cash_in_hand),fmt(T.pending),fmt(T.past_3_years),fmt(T.not_renewed),fmt(T.not_renewing),pct(T.pct_renewed)].forEach((v,i)=>ft.appendChild(el('td',i?'':'l',v)));
 const q=document.getElementById('q'),fs=document.getElementById('f');
 [...new Set(D.co.map(r=>r.panchayath))].sort().forEach(p=>{const o=el('option',null,p);o.value=p;fs.appendChild(o);});
 let sk='total_2027',sd=-1;
 function drawCo(){const tb=document.querySelector('#ct tbody');tb.textContent='';const qq=q.value.trim().toLowerCase(),ff=fs.value;
  D.co.filter(r=>(!ff||r.panchayath===ff)&&(!qq||r.care_of.toLowerCase().includes(qq)))
  .sort((a,b)=>(typeof a[sk]==='number'?a[sk]-b[sk]:String(a[sk]).localeCompare(String(b[sk])))*sd||b.total_2027-a.total_2027)
- .forEach(r=>{const tr=el('tr');[['care_of','l b'],['panchayath','l'],['total_2027','b'],['existing'],['new'],['past_3_years'],['not_renewed','w'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');
+ .forEach(r=>{const tr=el('tr');[['care_of','l b'],['panchayath','l'],['total_2027','b'],['existing'],['new'],['past_3_years'],['not_renewed','w'],['not_renewing'],['pct_renewed']].forEach(([k,c])=>{const td=el('td',c||'');
   if(k==='pct_renewed'){if(r.past_3_years>0)td.appendChild(pc(r[k]));else td.textContent='New C/O';}else td.textContent=(k==='care_of'||k==='panchayath')?r[k]:fmt(r[k]);tr.appendChild(td);});tb.appendChild(tr);});
  document.querySelectorAll('#ct th').forEach(th=>th.setAttribute('aria-sort',th.querySelector('button').dataset.k===sk?(sd>0?'ascending':'descending'):'none'));}
 document.querySelectorAll('#ct th button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;sd=sk===k?-sd:(k==='care_of'||k==='panchayath'?1:-1);sk=k;drawCo();}));
