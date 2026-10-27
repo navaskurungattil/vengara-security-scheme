@@ -7,8 +7,8 @@
 <meta name="description" content="Riyadh KMCC Vengara Mandalam – Security Scheme 2027 renewal status">
 <meta name="robots" content="noindex">
 <style>
-:root{--bg:#f3f5f2;--panel:#fff;--fg:#17241d;--muted:#5d6b63;--line:#dfe5df;--brand:#0f5132;--brand2:#2f7d5a;--new:#1f6fb2;--warn:#b54708;--track:#e7ece7}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1512;--panel:#17201b;--fg:#e8efe9;--muted:#9aaba1;--line:#2a3630;--brand:#3fa877;--brand2:#2b8a5f;--new:#5aa5e6;--warn:#f0a35e;--track:#24302a;color-scheme:dark}}
+:root{--bg:#f3f5f2;--panel:#fff;--fg:#17241d;--muted:#5d6b63;--line:#dfe5df;--brand:#0f5132;--brand2:#2f7d5a;--new:#1f6fb2;--warn:#b54708;--track:#e7ece7;--stop:#6d4aa8;--stopbg:#f3eefb;--stopline:#ddd0f2}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1512;--panel:#17201b;--fg:#e8efe9;--muted:#9aaba1;--line:#2a3630;--brand:#3fa877;--brand2:#2b8a5f;--new:#5aa5e6;--warn:#f0a35e;--track:#24302a;--stop:#c3a8f5;--stopbg:#221d2e;--stopline:#3b3150;color-scheme:dark}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
 .wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
@@ -24,7 +24,7 @@ h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
 .reg{display:grid;gap:10px;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr)}
 .stat{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
 .base{display:grid;gap:10px;grid-template-columns:repeat(5,minmax(0,1fr))}
-.kpi.mute b{color:var(--muted)}
+.kpi.mute{background:var(--stopbg);border-color:var(--stopline)}.kpi.mute b{color:var(--stop)}
 @media (max-width:760px){.reg{grid-template-columns:1fr}.base{grid-template-columns:repeat(2,minmax(0,1fr))}.base>.kpi:last-child{grid-column:1/-1}}
 .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
 .kpi b{display:block;font-size:28px;line-height:1.15}.kpi span{font-size:13px;color:var(--muted)}
@@ -110,7 +110,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1793087463"></script>
+<script src="data.js?v=1793087825"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
