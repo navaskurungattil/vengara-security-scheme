@@ -16,7 +16,7 @@ header.hero{background:#0f5132;color:#fff;border-radius:18px;padding:22px 24px}
 .org{font-weight:700;font-size:17px}.sub{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-top:2px}
 h1{font-size:clamp(26px,5vw,38px);margin:8px 0 4px;line-height:1.15}
 .asof{opacity:.85;font-size:14px}
-.upd{opacity:.7;font-size:12px;margin-top:2px}
+.upd{opacity:.85;font-size:14px;margin-top:2px}
 .take{color:var(--muted);margin:0}
 .group{display:grid;gap:10px}
 #k-total{display:grid}
@@ -71,7 +71,6 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <div class="org">Riyadh KMCC Vengara Mandalam</div>
     <div class="sub">Saudi KMCC Security Scheme</div>
     <h1>2027 Renewal Status</h1>
-    <div class="asof" id="asof"></div>
     <div class="upd" id="upd"></div>
   </header>
   <p class="take" id="take"></p>
@@ -110,7 +109,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1793075309"></script>
+<script src="data.js?v=1793075426"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
@@ -120,7 +119,6 @@ const s=k=>P.reduce((a,r)=>a+r[k],0);
 const T={};['total_2027','existing','new','active','cash_in_hand','pending','past_3_years','not_renewed'].forEach(k=>T[k]=s(k));
 T.pct_renewed=T.past_3_years?T.existing/T.past_3_years:0;
 const d=new Date(D.as_of+'T00:00:00Z');
-document.getElementById('asof').textContent='As of '+d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 if(D.updated_at){const u=new Date(D.updated_at);document.getElementById('upd').textContent='Last updated: '+u.toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Riyadh'})+' (Riyadh time)';}
 document.getElementById('take').textContent=`${fmt(T.total_2027)} registrations for 2027: ${fmt(T.existing)} renewals from ${fmt(T.past_3_years)} past members (${pct(T.pct_renewed)}) and ${fmt(T.new)} new. ${fmt(T.not_renewed)} past members still to renew.`;
 const n=k=>P.reduce((a,r)=>a+(r[k]||0),0);
