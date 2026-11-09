@@ -63,6 +63,14 @@ th button{all:unset;cursor:pointer}th button:focus-visible{outline:2px solid var
 .tools input,.tools select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);min-width:0}
 .tools input{flex:1 1 180px}
 .cobox{max-height:560px;overflow:auto}
+.coord{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:520px){.coord{grid-template-columns:1fr}}
+.ck{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+.ck .nm{font-weight:700;font-size:16px}
+.ck .nums{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
+.ck .nums div{display:grid}.ck .nums b{font-size:30px;line-height:1.1}.ck .nums span{font-size:12px;color:var(--muted)}
+.ck .nums .a b{color:var(--brand)}
+.ck small{font-size:12px;color:var(--muted)}
 footer{font-size:12px;color:var(--muted);text-align:center}
 </style>
 </head>
@@ -78,6 +86,10 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   <section class="group" aria-label="2027 registrations">
     <div class="glabel">2027 registrations</div>
     <div class="reg"><div id="k-total"></div><div class="stat" id="k-status"></div></div>
+  </section>
+  <section class="group" aria-label="By portal coordinator" id="coord-sec">
+    <div class="glabel">By portal coordinator</div>
+    <div class="coord" id="k-coord"></div>
   </section>
   <section class="group" aria-label="Renewal against past 3 years">
     <div class="glabel">Renewal against past 3 years (2024–2026)</div>
@@ -110,7 +122,7 @@ footer{font-size:12px;color:var(--muted);text-align:center}
   </section>
   <footer>Counts only · Source: Security Scheme 2027 portal export</footer>
 </div>
-<script src="data.js?v=1794249408"></script>
+<script src="data.js?v=1794249621"></script>
 <script>
 (function(){
 const D=window.SS_DATA, f0=new Intl.NumberFormat('en'), fmt=n=>f0.format(n), pct=v=>(v*100).toFixed(1)+'%';
@@ -141,6 +153,14 @@ tile(KS,'ok',S.active,'Active members',share(S.active),'var(--brand)');
 tile(KS,'',S.pending,'Pending',share(S.pending),'#c28a1a');
 tile(KS,'',S.cash,'Cash in hand',share(S.cash),'var(--new)');
 tile(KS,'',S.approved,'Approved',share(S.approved),'var(--muted)');
+const KC=document.getElementById('k-coord'),C=(D.coordinator||[]);
+if(!C.length)document.getElementById('coord-sec').hidden=true;
+C.forEach(r=>{const k=el('div','ck');k.appendChild(el('div','nm',r.coordinator));const nm=el('div','nums');
+ const a=el('div');a.append(el('b',null,fmt(r.total_2027)),el('span',null,'Registered'));
+ const b=el('div','a');b.append(el('b',null,fmt(r.active)),el('span',null,'Active'));nm.append(a,b);k.appendChild(nm);
+ const p=el('div','prog');const i=el('i');i.style.width=(r.total_2027?r.active/r.total_2027*100:0)+'%';p.appendChild(i);k.appendChild(p);
+ const parts=[`${pct(r.total_2027?r.active/r.total_2027:0)} active`];if(r.approved)parts.push(`${fmt(r.approved)} approved`);if(r.cash_in_hand)parts.push(`${fmt(r.cash_in_hand)} cash in hand`);parts.push(`${fmt(r.pending)} pending`);
+ k.appendChild(el('small',null,parts.join(' · ')));KC.appendChild(k);});
 const KB=document.getElementById('k-base');
 tile(KB,'',T.past_3_years,'Past 3 years members','2024 + 2025 + 2026');
 tile(KB,'ok',T.existing,'Renewed',pct(T.pct_renewed)+' of past members',null,T.pct_renewed);
